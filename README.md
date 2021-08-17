@@ -42,7 +42,7 @@ Download the demo video [here](https://github.com/jetspiking/WPAppInstall/blob/m
 <img src="https://github.com/jetspiking/WPAppInstall/blob/main/Images/AppSettings_Blackberry.png" width="700">
 
 # Contributing
-Feel free to suggest improvements and open issues. If you want to continue with the project and make improvements, feel free to fork the project.
+Feel free to suggest improvements and open issues. If you want to continue with the project and make improvements you can fork the project.
 
 
 
