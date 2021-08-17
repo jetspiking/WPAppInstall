@@ -1,0 +1,84 @@
+﻿<Window x:Class="WPAppInstall.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPAppInstall"
+        mc:Ignorable="d"
+        ResizeMode="NoResize"
+        Height="700" Width="800">
+
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Vertical" Background="White">
+
+            <StackPanel Orientation="Horizontal">
+
+                <DockPanel Background="White">
+                    <Menu DockPanel.Dock="Bottom" Background="White">
+                        <MenuItem>
+                            <MenuItem.Header>
+                                <Image Name="WPLogoImage" Width="28" Height="28" Stretch="UniformToFill"></Image>
+                            </MenuItem.Header>
+
+                            <MenuItem Header="Previous" Name="PreviousMenuButton" IsEnabled="False" FontFamily="Segoe UI" />
+                            <Separator/>
+                            <MenuItem Header="Devices" Name="DevicesMenuButton" FontFamily="Segoe UI" />
+                            <MenuItem Header="Apps" Name="AppsMenuButton" FontFamily="Segoe UI" />
+                            <MenuItem Header="Deploy" Name="DeployMenuButton" FontFamily="Segoe UI" />
+                            <MenuItem Header="Settings" Name="SettingsMenuButton" FontFamily="Segoe UI" />
+                            <Separator/>
+                            <MenuItem Header="Manager" Name="ManagerMenuButton" FontFamily="Segoe UI"/>
+                            <Separator/>
+                            <MenuItem Header="Start" Name="StartMenuButton" FontFamily="Segoe UI"/>
+                            <Separator/>
+                            <MenuItem Header="Exit" Name="ExitMenuButton" FontFamily="Segoe UI" FontWeight="Bold" />
+
+
+                        </MenuItem>
+                    </Menu>
+                </DockPanel>
+
+                <Label Name="AppDescription"/>
+
+            </StackPanel>
+
+
+
+            <StackPanel Name="MenuBar" Orientation="Horizontal" Margin="5,5,5,5">
+
+                <Image Name="WPSeperatorImage" Stretch="Fill" Margin="0,0,5,0"></Image>
+
+                <Button Width="130" Background="Transparent" BorderBrush="Transparent" Name="StartButton">
+                    <TextBlock FontFamily="Segoe UI" FontWeight="Bold" FontSize="26" Margin="5,5,5,5">Start</TextBlock>
+                </Button>
+
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+                <Button Width="130" Background="Transparent" BorderBrush="Transparent" Name="DevicesButton">
+                    <TextBlock FontFamily="Segoe UI" FontWeight="Bold" FontSize="26" Margin="5,5,5,5">Devices</TextBlock>
+                </Button>
+
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+                <Button Width="130" Background="Transparent" BorderBrush="Transparent" Name="AppsButton">
+                    <TextBlock FontFamily="Segoe UI" FontWeight="Bold" FontSize="26" Margin="5,5,5,5">Apps</TextBlock>
+                </Button>
+
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+                <Button Width="130" Background="Transparent" BorderBrush="Transparent" Name="DeployButton">
+                    <TextBlock FontFamily="Segoe UI" FontWeight="Bold" FontSize="26" Margin="5,5,5,5">Deploy</TextBlock>
+                </Button>
+
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+                <Button Width="130" Background="Transparent" BorderBrush="Transparent" Name="SettingsButton">
+                    <TextBlock FontFamily="Segoe UI" FontWeight="Bold" FontSize="26" Margin="5,5,5,5">Settings</TextBlock>
+                </Button>
+
+            </StackPanel>
+        </StackPanel>
+
+        <ScrollViewer DockPanel.Dock="Bottom" Name="PageContent" Margin="10,10,10,0"></ScrollViewer>
+    </DockPanel>
+</Window>
