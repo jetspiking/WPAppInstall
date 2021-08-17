@@ -28,7 +28,7 @@ WPAppInstall allows deploying Windows Phone applications to an unlocked Windows 
 
 #### App Manager
 
-
+<img src="https://github.com/jetspiking/WPAppInstall/blob/main/Images/AppManager_Lime.png" width="400">
 
 #### Settings
 
