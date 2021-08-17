@@ -6,7 +6,7 @@ Deploy apps to your (unlocked) Windows Phone 8 or Windows 10 Mobile device(s).
 WPAppInstall allows deploying Windows Phone applications to an unlocked Windows Phone 8 or Windows 10 Mobile Device. The application adds a few extra possibilities, such as manipulating installed applications remotely over USB.
 
 # Usage
-Download and unarchive the .zip under releases and launch the executable "WPAppInstall.exe". The program is portable, so no installation is required.
+Download and unarchive the .zip under releases and launch the executable "WPAppInstall.exe". The program is portable.
 
 [Releases](https://github.com/jetspiking/WPAppInstall/releases)
 
