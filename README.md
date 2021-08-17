@@ -1,5 +1,5 @@
 # WPAppInstall
-<img src="https://github.com/jetspiking/WPAppInstall/blob/main/Images/AppConnected_Mango.png" width="700">
+<img src="https://github.com/jetspiking/WPAppInstall/blob/main/Images/AppStart_Apple.png" width="400">
 Deploy apps to your (unlocked) Windows Phone 8 or Windows 10 Mobile device(s). 
 
 # Description
