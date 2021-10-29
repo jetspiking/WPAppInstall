@@ -1,3 +1,7 @@
+[![Github All Releases](https://img.shields.io/github/downloads/jetspiking/WPAppInstall/total.svg)]()
+[![License](https://img.shields.io/github/license/jetspiking/WPAppInstall.svg)]()
+[![Stars](https://img.shields.io/github/stars/jetspiking/WPAppInstall.svg)]()
+
 # WPAppInstall
 <img src="https://github.com/jetspiking/WPAppInstall/blob/main/Images/AppStart_Blackberry.png" width="500">
 Deploy apps to your (unlocked) Windows Phone 8 or Windows 10 Mobile device(s). 
