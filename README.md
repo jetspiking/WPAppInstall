@@ -53,7 +53,10 @@ Download the demo video [here](https://github.com/jetspiking/WPAppInstall/blob/m
 # Contributing
 Feel free to suggest improvements and open issues. If you want to continue with the project and make changes you can fork the project. The project is licensed under the MIT-license. 
 
+# Thank you for using WPAppInstall
+If you enjoy WPAppInstall and feel like it is a cool application and you want to support me, you could consider buying me a drink by navigating to my Buy Me A Coffee account.
 
+<a href="https://www.buymeacoffee.com/DustinHendriks" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
 
 
 
