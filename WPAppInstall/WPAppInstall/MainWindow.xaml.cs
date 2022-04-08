@@ -25,16 +25,16 @@ namespace WPAppInstall
     /// <summary>
     /// Main application window.
     /// </summary>
-
     public partial class MainWindow : Window, IThemeUpdatable, IUSBSubsriber, INavigator, IResizable
     {
-
-        private USBConnectionHandler _windowsPhoneHandlerUSB;
+        private USBConnectionHandler windowsPhoneHandlerUSB;
         private DialogPopup _dialogUSB;
 
+        /// <summary>
+        /// Build the user interface and bind button actions.
+        /// </summary>
         public MainWindow()
         {
-
             InitializeComponent();
             Title = AppStrings.APP_NAME;
             AppDescription.Content = AppStrings.APP_DESCRIPTION;
@@ -71,10 +71,12 @@ namespace WPAppInstall
             this.UseLayoutRounding = true;
             
             SelectPage(Misc.Application.Lifecycle.ApplicationPage);
-            _windowsPhoneHandlerUSB = new USBConnectionHandler(this);
-
+            windowsPhoneHandlerUSB = new USBConnectionHandler(this);
         }
 
+        /// <summary>
+        /// Select and open the manager page.
+        /// </summary>
         private void ManagerMenuButton_Click(object sender, RoutedEventArgs e)
         {
             if (Misc.Application.Lifecycle.ApplicationPage != AppPages.Manager)
@@ -84,6 +86,9 @@ namespace WPAppInstall
             }
         }
 
+        /// <summary>
+        /// Select and open the apps page.
+        /// </summary>
         private void AppsButton_Click(object sender, RoutedEventArgs e)
         {
             if (Misc.Application.Lifecycle.ApplicationPage != AppPages.Apps)
@@ -93,6 +98,9 @@ namespace WPAppInstall
             }
         }
 
+        /// <summary>
+        /// Select and open the start page.
+        /// </summary>
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
             if (Misc.Application.Lifecycle.ApplicationPage != AppPages.Start)
@@ -102,6 +110,9 @@ namespace WPAppInstall
             }
         }
 
+        /// <summary>
+        /// Navigate to the previously visited page.
+        /// </summary>
         private void PreviousMenuButton_Click(object sender, RoutedEventArgs e)
         {
             AppPages? appPage = Misc.Application.Lifecycle.PopPage();
@@ -117,11 +128,17 @@ namespace WPAppInstall
                 PreviousMenuButton.IsEnabled = false;
         }
 
+        /// <summary>
+        /// Exit the application.
+        /// </summary>
         private void ExitMenuButton_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
         }
 
+        /// <summary>
+        /// Navigate to the settings page.
+        /// </summary>
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
 
@@ -132,6 +149,9 @@ namespace WPAppInstall
             }
         }
 
+        /// <summary>
+        /// Navigate to the deploy page.
+        /// </summary>
         private void DeployButton_Click(object sender, RoutedEventArgs e)
         {
             if (Misc.Application.Lifecycle.ApplicationPage != AppPages.Deploy)
@@ -141,6 +161,9 @@ namespace WPAppInstall
             }
         }
 
+        /// <summary>
+        /// Navigate to the devices page.
+        /// </summary>
         private void DevicesButton_Click(object sender, RoutedEventArgs e)
         {
             if (Misc.Application.Lifecycle.ApplicationPage != AppPages.Devices)
@@ -150,6 +173,10 @@ namespace WPAppInstall
             }
         }
 
+        /// <summary>
+        /// Navigate to the selected page.
+        /// </summary>
+        /// <param name="page">Page to navigate to.</param>
         private void SelectPage(AppPages page)
         {
             switch (page)
@@ -186,7 +213,12 @@ namespace WPAppInstall
             Misc.Application.Lifecycle.ApplicationPage = page;
         }
 
-        private void DeselectPage(AppPages page, bool isPreviousPage = false)
+        /// <summary>
+        /// Move away from a page.
+        /// </summary>
+        /// <param name="page">Move away from the specified page.</param>
+        /// <param name="isPreviousPage">Describe whether the page should be added to previous pages.</param>
+        private void DeselectPage(AppPages page, Boolean isPreviousPage = false)
         {
             switch (page)
             {
@@ -214,6 +246,9 @@ namespace WPAppInstall
             }
         }
 
+        /// <summary>
+        /// Update the application theme color.
+        /// </summary>
         public void UpdateAppTheme()
         {
             AppDescription.Foreground = new SolidColorBrush(Misc.Application.Lifecycle.ApplicationColor);
@@ -221,23 +256,29 @@ namespace WPAppInstall
             WPSeperatorImage.Source = Misc.Image.GetSeperator(Misc.Application.Lifecycle.ApplicationTheme);
         }
 
+        /// <summary>
+        /// Create a popup that displays information about a connected or disconnected usb device.
+        /// </summary>
+        /// <param name="action">Usb connect or disconnect action.</param>
+        /// <param name="name">Name of the connected or disconnected device.</param>
         private void USBPopup(USBConnectionHandler.USBActions action, String name)
         {
-            Thread.Sleep(500); // Time needed to add more potential devices after this request (see USBConnectionHandler). 
+            // Time needed to add more potential devices after this request (see USBConnectionHandler). 
+            Thread.Sleep(500); 
 
             USBConnectionHandler.USBDevice usbProperty = new USBConnectionHandler.USBDevice(name);
-            VendorIds.Vendors? vendor = VendorIds.GetVendor(usbProperty.vendorId);
+            VendorIds.Vendors? vendor = VendorIds.GetVendor(usbProperty.VendorId);
 
             if (vendor == null) return;
 
-            String vid = $"{AppStrings.HARDWARE_USB_VID}: {usbProperty.vendorId} ({((VendorIds.Vendors)vendor).ToString()})";
-            String pid = $"{AppStrings.HARDWARE_USB_PID}: {usbProperty.productId}";
-            String guid = $"{AppStrings.HARDWARE_USB_GUID}: {usbProperty.guid}";
+            String vid = $"{AppStrings.HARDWARE_USB_VID}: {usbProperty.VendorId} ({((VendorIds.Vendors)vendor).ToString()})";
+            String pid = $"{AppStrings.HARDWARE_USB_PID}: {usbProperty.ProductId}";
+            String guid = $"{AppStrings.HARDWARE_USB_GUID}: {usbProperty.Guid}";
 
-            String pidAddition = ProductIds.GetPIDAddition(usbProperty.productId);
+            String pidAddition = ProductIds.GetPIDAddition(usbProperty.ProductId);
             if (pidAddition != null)
-                pid += $" ({ProductIds.GetPIDAddition(usbProperty.productId)})";
-            else if (usbProperty.productId != AppStrings.APP_WINDOWS_PHONE_7_PID)
+                pid += $" ({ProductIds.GetPIDAddition(usbProperty.ProductId)})";
+            else if (usbProperty.ProductId != AppStrings.APP_WINDOWS_PHONE_7_PID)
                 pid += $" ({AppStrings.APP_WINDOWS_PHONE_8_10_DEVICE})";
 
             String content = String.Empty;
@@ -245,21 +286,21 @@ namespace WPAppInstall
             USBScanner.USBDevice usbDevice = null;
 
             if (action == USBConnectionHandler.USBActions.Connect) 
-                Misc.Application.Lifecycle.DevicesUSB = USBScanner.GetUSBDevices(USBScanner.FILTER_PROPERTIES_WINDOWS_PHONE);
+                Misc.Application.Lifecycle.DevicesUSB = USBScanner.GetUSBDevices(USBScanner.FilterPropertiesWindowsPhone);
 
             Misc.Application.Lifecycle.DevicesUSB.ForEach(device =>
             {
-                USBConnectionHandler.USBDevice usbDeviceProperty = new USBConnectionHandler.USBDevice(device.pnpDeviceId);
+                USBConnectionHandler.USBDevice usbDeviceProperty = new USBConnectionHandler.USBDevice(device.PnpDeviceId);
 
-                if (usbDeviceProperty.productId == usbProperty.productId && usbDeviceProperty.vendorId == usbProperty.vendorId) //  && usbDeviceProperty.vendorId == usbProperty.vendorId
+                if (usbDeviceProperty.ProductId == usbProperty.ProductId && usbDeviceProperty.VendorId == usbProperty.VendorId) //  && usbDeviceProperty.vendorId == usbProperty.vendorId
                 {
                     usbDevice = device;
 
-                    VendorIds.Vendors? vendorContains = VendorIds.Contains(device.name);
+                    VendorIds.Vendors? vendorContains = VendorIds.Contains(device.Name);
                     if (vendorContains != null)
                         vendor = vendorContains;
 
-                    if (ProductIds.Contains(device.name))
+                    if (ProductIds.Contains(device.Name))
                         return;
                 }
             });
@@ -268,8 +309,8 @@ namespace WPAppInstall
 
             if (usbDevice != null)
             {
-                content += $"\n{AppStrings.HARDWARE_USB_CAPTION}: {usbDevice.caption.ToUpper()}\n\n{AppStrings.HARDWARE_USB_MANUFACTURER}: {usbDevice.manufacturer}\n{AppStrings.HARDWARE_USB_DESCRIPTION}: {usbDevice.description}\n{AppStrings.HARDWARE_USB_STATUS}: {usbDevice.status}\n\n";
-                deviceImage = Misc.Image.GetDeviceImage(usbDevice.pnpDeviceId);
+                content += $"\n{AppStrings.HARDWARE_USB_CAPTION}: {usbDevice.Caption.ToUpper()}\n\n{AppStrings.HARDWARE_USB_MANUFACTURER}: {usbDevice.Manufacturer}\n{AppStrings.HARDWARE_USB_DESCRIPTION}: {usbDevice.Description}\n{AppStrings.HARDWARE_USB_STATUS}: {usbDevice.Status}\n\n";
+                deviceImage = Misc.Image.GetDeviceImage(usbDevice.PnpDeviceId);
             }
 
 
@@ -288,23 +329,39 @@ namespace WPAppInstall
             }));
         }
 
+        /// <summary>
+        /// Create a popup for a connected device.
+        /// </summary>
+        /// <param name="name">Name of the connected device.</param>
         public void NotifyConnected(String name)
         {
             USBPopup(USBConnectionHandler.USBActions.Connect, name);
         }
 
+        /// <summary>
+        /// Create a popup for a disconnected device.
+        /// </summary>
+        /// <param name="name">Name of the disconnected device.</param>
         public void NotifyDisconnected(String name)
         {
             USBPopup(USBConnectionHandler.USBActions.Disconnect, name);
         }
 
+        /// <summary>
+        /// Navigate to a page.
+        /// </summary>
+        /// <param name="appPage">Page to navigate to.</param>
         public void Navigate(AppPages appPage)
         {
             DeselectPage(Misc.Application.Lifecycle.ApplicationPage);
             SelectPage(appPage);
         }
 
-        public void SetResizable(bool enabled)
+        /// <summary>
+        /// Enable or disable resizing the application.
+        /// </summary>
+        /// <param name="enabled">Enable (true) or disable (false) resizing the application.</param>
+        public void SetResizable(Boolean enabled)
         {
             this.ResizeMode = enabled ? ResizeMode.CanResizeWithGrip : ResizeMode.NoResize;
         }

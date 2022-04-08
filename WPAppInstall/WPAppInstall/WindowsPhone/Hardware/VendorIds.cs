@@ -9,9 +9,11 @@ namespace WPAppInstall.WindowsPhone.Hardware
     /// <summary>
     /// Check for known Windows Phone vendors.
     /// </summary>
-
     public static class VendorIds
     {
+        /// <summary>
+        /// List of companies that are registered vendors for Windows Phones.
+        /// </summary>
         public enum Vendors
         {
             Nokia,
@@ -34,6 +36,9 @@ namespace WPAppInstall.WindowsPhone.Hardware
             Alcatel
         }
     
+        /// <summary>
+        /// Dictionary that matches the vendor based on a vendor id. Some vendors are not officially registered and use Microsofts id. An example of this is BLU.
+        /// </summary>
         private static readonly Dictionary<String, Vendors> VENDOR_IDS = new Dictionary<String, Vendors>()
         {
             { "0421", Vendors.Nokia },
@@ -58,16 +63,24 @@ namespace WPAppInstall.WindowsPhone.Hardware
             { "1BBB", Vendors.Alcatel }
         };
 
+        /// <summary>
+        /// Check if the vendor exists based on the product name.
+        /// </summary>
+        /// <param name="name">Name of the product.</param>
+        /// <returns>Matching vendor, null if not matching.</returns>
         public static Vendors? Contains(String name)
         {
             foreach (Vendors vendor in Enum.GetValues(typeof(Vendors)))
-            {
                 if (name.ToLower().Contains(vendor.ToString().ToLower()))
                     return vendor;
-            }
             return null;
         }
 
+        /// <summary>
+        /// Check if the vendor exists based on the vendor id.
+        /// </summary>
+        /// <param name="vendorId">Identifier of the vendor.</param>
+        /// <returns>Matching vendor, null if not matching.</returns>
         public static Vendors? GetVendor(String vendorId)
         {
             if (vendorId != null)

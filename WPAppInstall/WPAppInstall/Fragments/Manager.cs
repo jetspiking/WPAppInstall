@@ -16,17 +16,19 @@ namespace WPAppInstall.Fragments
     /// <summary>
     /// This class builds the view / window to read phone data (manager). 
     /// </summary>
-
     public class Manager : IFragment
     {
-        private StackPanel _stackPanel = new StackPanel();
-        private Microsoft.Phone.Tools.Deploy.DeviceInfo _selectedDeviceInfo;
-        private Microsoft.Phone.Tools.Deploy.DeviceInfo[] _devicesInfo;
-        private Grid _deviceSpecificationsGrid = new Grid();
-        private Grid _deviceApplicationsGrid = new Grid();
-        private int _specificationRowIndex = 0;
-        private int _applicationRowIndex = 0;
+        private StackPanel stackPanel = new StackPanel();
+        private Microsoft.Phone.Tools.Deploy.DeviceInfo selectedDeviceInfo;
+        private Microsoft.Phone.Tools.Deploy.DeviceInfo[] devicesInfo;
+        private Grid deviceSpecificationsGrid = new Grid();
+        private Grid deviceApplicationsGrid = new Grid();
+        private Int32 specificationRowIndex = 0;
+        private Int32 applicationRowIndex = 0;
 
+        /// <summary>
+        /// Build the view or page that is used for managing installed applications.
+        /// </summary>
         public Manager()
         {
             // Read section
@@ -42,7 +44,7 @@ namespace WPAppInstall.Fragments
             {
                 Content = managerReadTextblock
             };
-            _stackPanel.Children.Add(managerReadLabel);
+            stackPanel.Children.Add(managerReadLabel);
 
             ComboBox managerDeviceCombobox = new ComboBox
             {
@@ -51,16 +53,16 @@ namespace WPAppInstall.Fragments
                 IsEditable = true,
                 IsReadOnly = true
             };
-            _devicesInfo = Microsoft.Phone.Tools.Deploy.Utils.GetDevices();
-            if (_devicesInfo.Length > 0)
+            devicesInfo = Microsoft.Phone.Tools.Deploy.Utils.GetDevices();
+            if (devicesInfo.Length > 0)
             {
-                _selectedDeviceInfo = _devicesInfo[0];
-                managerDeviceCombobox.SelectedItem = _selectedDeviceInfo;
+                selectedDeviceInfo = devicesInfo[0];
+                managerDeviceCombobox.SelectedItem = selectedDeviceInfo;
             }
-            foreach (Microsoft.Phone.Tools.Deploy.DeviceInfo device in _devicesInfo)
+            foreach (Microsoft.Phone.Tools.Deploy.DeviceInfo device in devicesInfo)
                 managerDeviceCombobox.Items.Add(device);
             managerDeviceCombobox.SelectionChanged += ManagerDeviceCombobox_SelectionChanged; ;
-            _stackPanel.Children.Add(managerDeviceCombobox);
+            stackPanel.Children.Add(managerDeviceCombobox);
 
             Button managerReadButton = new Button
             {
@@ -70,7 +72,7 @@ namespace WPAppInstall.Fragments
                 Margin = new Thickness(0, 10, 0, 0)
             };
             managerReadButton.Click += ManagerReadButton_Click;
-            _stackPanel.Children.Add(managerReadButton);
+            stackPanel.Children.Add(managerReadButton);
 
             // Device Specs Grid 
             TextBlock deviceSpecificationsTextblock = new TextBlock
@@ -85,13 +87,13 @@ namespace WPAppInstall.Fragments
             {
                 Content = deviceSpecificationsTextblock
             };
-            _stackPanel.Children.Add(deviceSpecificationsLabel);
+            stackPanel.Children.Add(deviceSpecificationsLabel);
 
             ColumnDefinition deviceSpecification = new ColumnDefinition();
             ColumnDefinition deviceValue = new ColumnDefinition();
-            _deviceSpecificationsGrid.ColumnDefinitions.Add(deviceSpecification);
-            _deviceSpecificationsGrid.ColumnDefinitions.Add(deviceValue);
-            _stackPanel.Children.Add(_deviceSpecificationsGrid);
+            deviceSpecificationsGrid.ColumnDefinitions.Add(deviceSpecification);
+            deviceSpecificationsGrid.ColumnDefinitions.Add(deviceValue);
+            stackPanel.Children.Add(deviceSpecificationsGrid);
 
             // Device Apps Grid
             TextBlock deviceApplicationsTextblock = new TextBlock
@@ -106,27 +108,33 @@ namespace WPAppInstall.Fragments
             {
                 Content = deviceApplicationsTextblock
             };
-            _stackPanel.Children.Add(deviceApplicationsLabel);
+            stackPanel.Children.Add(deviceApplicationsLabel);
 
             ColumnDefinition appId = new ColumnDefinition();
             ColumnDefinition appLaunchButton = new ColumnDefinition();
             ColumnDefinition appTerminateButton = new ColumnDefinition();
             ColumnDefinition appUninstallButton = new ColumnDefinition();
-            _deviceApplicationsGrid.ColumnDefinitions.Add(appId);
-            _deviceApplicationsGrid.ColumnDefinitions.Add(appLaunchButton);
-            _deviceApplicationsGrid.ColumnDefinitions.Add(appTerminateButton);
-            _deviceApplicationsGrid.ColumnDefinitions.Add(appUninstallButton);
-            _stackPanel.Children.Add(_deviceApplicationsGrid);
+            deviceApplicationsGrid.ColumnDefinitions.Add(appId);
+            deviceApplicationsGrid.ColumnDefinitions.Add(appLaunchButton);
+            deviceApplicationsGrid.ColumnDefinitions.Add(appTerminateButton);
+            deviceApplicationsGrid.ColumnDefinitions.Add(appUninstallButton);
+            stackPanel.Children.Add(deviceApplicationsGrid);
         }
 
+        /// <summary>
+        /// Change the selected device when the selection of the combobox changed.
+        /// </summary>
         private void ManagerDeviceCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _selectedDeviceInfo = (Microsoft.Phone.Tools.Deploy.DeviceInfo)((ComboBox)sender).SelectedItem;
+            selectedDeviceInfo = (Microsoft.Phone.Tools.Deploy.DeviceInfo)((ComboBox)sender).SelectedItem;
         }
 
+        /// <summary>
+        /// Read the device specifications and installed applications.
+        /// </summary>
         private void ManagerReadButton_Click(object sender, RoutedEventArgs e)
         {
-            if (_selectedDeviceInfo == _devicesInfo[0] && Misc.Application.Lifecycle.DevicesUSB.Count == 0)
+            if (selectedDeviceInfo == devicesInfo[0] && Misc.Application.Lifecycle.DevicesUSB.Count == 0)
             {
                 BitmapImage warningImage = Misc.Image.GetResourceImage(AppStrings.APP_DIALOG_WARNING, Misc.Image.Extensions.png);
                 DialogPopup dialogPopup = new DialogPopup(AppStrings.MANAGER_WARNING, AppStrings.MANAGER_CONNECT_DEVICE, null, DialogPopup.DefaultButtons.Ok, warningImage, false);
@@ -138,12 +146,12 @@ namespace WPAppInstall.Fragments
             DialogPopup infoDialogPopup = new DialogPopup(AppStrings.MANAGER_INFO, AppStrings.MANAGER_READING, null, DialogPopup.DefaultButtons.None, infoImage, false);
             infoDialogPopup.Show();
 
-            _deviceSpecificationsGrid.Children.Clear();
-            _deviceApplicationsGrid.Children.Clear();
-            _specificationRowIndex = 0;
-            _applicationRowIndex = 0;
+            deviceSpecificationsGrid.Children.Clear();
+            deviceApplicationsGrid.Children.Clear();
+            specificationRowIndex = 0;
+            applicationRowIndex = 0;
 
-            if (Misc.Application.Lifecycle.DevicesUSB.Count > 1 && _selectedDeviceInfo == _devicesInfo[0])
+            if (Misc.Application.Lifecycle.DevicesUSB.Count > 1 && selectedDeviceInfo == devicesInfo[0])
             {
                 BitmapImage warningImage = Misc.Image.GetResourceImage(AppStrings.APP_DIALOG_WARNING, Misc.Image.Extensions.png);
                 DialogPopup dialogPopup = new DialogPopup(AppStrings.MANAGER_WARNING, AppStrings.MANAGER_DISCONNECT_DEVICES, null, DialogPopup.DefaultButtons.None, warningImage, false);
@@ -155,26 +163,20 @@ namespace WPAppInstall.Fragments
             {
                 try
                 {
-
                     System.Collections.ObjectModel.Collection<Microsoft.SmartDevice.MultiTargeting.Connectivity.ConnectableDevice> devices = Misc.Application.Lifecycle.Hardware81.ScanDevices();
                     Microsoft.SmartDevice.MultiTargeting.Connectivity.ConnectableDevice connectableDevice = null;
-
                     foreach (Microsoft.SmartDevice.MultiTargeting.Connectivity.ConnectableDevice device in devices)
-                        if (device.Name == _selectedDeviceInfo.ToString())
+                        if (device.Name == selectedDeviceInfo.ToString())
                         {
                             connectableDevice = device;
                             break;
                         }
-
                     if (connectableDevice == null) return;
                     Microsoft.SmartDevice.Connectivity.Interface.IDevice deviceHandle = Misc.Application.Lifecycle.Hardware81.ConnectToDevice(connectableDevice);
-
                     System.Collections.ObjectModel.Collection<Microsoft.SmartDevice.Connectivity.Interface.IRemoteApplication> apps = Misc.Application.Lifecycle.Hardware81.GetRemoteApplications(deviceHandle);
-
                     Application.Current.Dispatcher.Invoke(new Action(() =>
                     {
                         Microsoft.SmartDevice.Connectivity.Interface.ISystemInfo systemInfo = deviceHandle.GetSystemInfo();
-
                         AddSpecificationsGridEntry("Name", deviceHandle.Name);
                         AddSpecificationsGridEntry("Instruction Set", systemInfo.InstructionSet);
                         AddSpecificationsGridEntry("Architecture", systemInfo.ProcessorArchitecture);
@@ -186,16 +188,11 @@ namespace WPAppInstall.Fragments
                         AddSpecificationsGridEntry("Available Physical", systemInfo.AvailPhys.ToString());
                         AddSpecificationsGridEntry("Total Virtual", systemInfo.TotalVirtual.ToString());
                         AddSpecificationsGridEntry("Available Virtual", systemInfo.AvailVirtual.ToString());
-
                         foreach (Microsoft.SmartDevice.Connectivity.Interface.IRemoteApplication remoteApplication in apps)
                             AddApplicationsGridEntry(remoteApplication.ProductID.ToString(), remoteApplication);
-
                         infoDialogPopup.Close();
-
                     }));
-
                     deviceHandle.Disconnect();
-
                 } catch(Exception exception)
                 {
                     Application.Current.Dispatcher.Invoke(new Action(() =>
@@ -203,92 +200,84 @@ namespace WPAppInstall.Fragments
                         ShowErrorDialog(exception.Message);
                     }));
                 }
-
             }).Start();
-
-
         }
 
+        /// <summary>
+        /// Add a device specification to the view.
+        /// </summary>
+        /// <param name="specification">Device specification label.</param>
+        /// <param name="value">Specification value.</param>
         private void AddSpecificationsGridEntry(String specification, String value)
         {
-
             RowDefinition row = new RowDefinition();
-            _deviceSpecificationsGrid.RowDefinitions.Add(row);
-
+            deviceSpecificationsGrid.RowDefinitions.Add(row);
             Label specificationLabel = new Label
             {
                 Content = specification
             };
-
             Label valueLabel = new Label
             {
                 Content = value
             };
-
             specificationLabel.SetValue(Grid.ColumnProperty, 0);
-            specificationLabel.SetValue(Grid.RowProperty, _specificationRowIndex);
-
+            specificationLabel.SetValue(Grid.RowProperty, specificationRowIndex);
             valueLabel.SetValue(Grid.ColumnProperty, 1);
-            valueLabel.SetValue(Grid.RowProperty, _specificationRowIndex);
-
-            _deviceSpecificationsGrid.Children.Add(specificationLabel);
-            _deviceSpecificationsGrid.Children.Add(valueLabel);
-
-            _specificationRowIndex++;
+            valueLabel.SetValue(Grid.RowProperty, specificationRowIndex);
+            deviceSpecificationsGrid.Children.Add(specificationLabel);
+            deviceSpecificationsGrid.Children.Add(valueLabel);
+            specificationRowIndex++;
         }
 
+        /// <summary>
+        /// Add an application to the grid.
+        /// </summary>
+        /// <param name="appId">App that should be displayed.</param>
+        /// <param name="remoteApplication">Remote application.</param>
         private void AddApplicationsGridEntry(String appId, Microsoft.SmartDevice.Connectivity.Interface.IRemoteApplication remoteApplication)
         {
-
             RowDefinition row = new RowDefinition();
-            _deviceApplicationsGrid.RowDefinitions.Add(row);
-
+            deviceApplicationsGrid.RowDefinitions.Add(row);
             Label appIdLabel = new Label
             {
                 Content = appId
             };
-
             Button launchAppButton = new Button
             {
                 Content = "Launch",
                 Tag = remoteApplication
             };
             launchAppButton.Click += LaunchAppButton_Click;
-
             Button terminateAppButton = new Button
             {
                 Content = "Terminate",
                 Tag = remoteApplication
             };
             terminateAppButton.Click += TerminateAppButton_Click;
-
             Button uninstallAppButton = new Button
             {
                 Content = "Uninstall",
                 Tag = remoteApplication
             };
             uninstallAppButton.Click += UninstallAppButton_Click;
-
             appIdLabel.SetValue(Grid.ColumnProperty, 0);
-            appIdLabel.SetValue(Grid.RowProperty, _applicationRowIndex);
-
+            appIdLabel.SetValue(Grid.RowProperty, applicationRowIndex);
             launchAppButton.SetValue(Grid.ColumnProperty, 1);
-            launchAppButton.SetValue(Grid.RowProperty, _applicationRowIndex);
-
+            launchAppButton.SetValue(Grid.RowProperty, applicationRowIndex);
             terminateAppButton.SetValue(Grid.ColumnProperty, 2);
-            terminateAppButton.SetValue(Grid.RowProperty, _applicationRowIndex);
-
+            terminateAppButton.SetValue(Grid.RowProperty, applicationRowIndex);
             uninstallAppButton.SetValue(Grid.ColumnProperty, 3);
-            uninstallAppButton.SetValue(Grid.RowProperty, _applicationRowIndex);
-
-            _deviceApplicationsGrid.Children.Add(appIdLabel);
-            _deviceApplicationsGrid.Children.Add(launchAppButton);
-            _deviceApplicationsGrid.Children.Add(terminateAppButton);
-            _deviceApplicationsGrid.Children.Add(uninstallAppButton);
-
-            _applicationRowIndex++;
+            uninstallAppButton.SetValue(Grid.RowProperty, applicationRowIndex);
+            deviceApplicationsGrid.Children.Add(appIdLabel);
+            deviceApplicationsGrid.Children.Add(launchAppButton);
+            deviceApplicationsGrid.Children.Add(terminateAppButton);
+            deviceApplicationsGrid.Children.Add(uninstallAppButton);
+            applicationRowIndex++;
         }
 
+        /// <summary>
+        /// Terminate the corresponding application on a button click action.
+        /// </summary>
         private void TerminateAppButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -302,6 +291,9 @@ namespace WPAppInstall.Fragments
             }
         }
 
+        /// <summary>
+        /// Uninstall the corresponding application on a button click action.
+        /// </summary>
         private void UninstallAppButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -315,6 +307,9 @@ namespace WPAppInstall.Fragments
             }
         }
 
+        /// <summary>
+        /// Launch the corresponding application on a button click action.
+        /// </summary>
         private void LaunchAppButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -328,11 +323,10 @@ namespace WPAppInstall.Fragments
             }
         }
 
-        private void ShowInfoDialog(String info)
-        {
-
-        }
-
+        /// <summary>
+        /// Show an error dialog for when an error occurs in the manager.
+        /// </summary>
+        /// <param name="error">Error to display.</param>
         private void ShowErrorDialog(String error)
         {
             BitmapImage errorImage = Misc.Image.GetResourceImage(AppStrings.APP_DIALOG_ERROR, Misc.Image.Extensions.png);
@@ -340,9 +334,13 @@ namespace WPAppInstall.Fragments
             dialogPopup.Show();
         }
 
+        /// <summary>
+        /// Get the root of this view for displaying purposes.
+        /// </summary>
+        /// <returns>Root of this view.</returns>
         public StackPanel GetRoot()
         {
-            return _stackPanel;
+            return stackPanel;
         }
     }
 }

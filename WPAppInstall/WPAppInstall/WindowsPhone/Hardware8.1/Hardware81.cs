@@ -15,10 +15,9 @@ namespace WPAppInstall.WindowsPhone.Hardware8._1
     /// <summary>
     /// This class provides functions to receive information from one connected Windows Phone, or perform actions on it.
     /// </summary>
-
     public class Hardware81
     {
-        DeviceController _deviceController = DeviceController.GetInstance();
+        private DeviceController deviceController = DeviceController.GetInstance();
 
         public Hardware81()
         {
@@ -28,7 +27,6 @@ namespace WPAppInstall.WindowsPhone.Hardware8._1
         /// Enable / disable launching an application immediately after installation.
         /// </summary>
         /// <param name="launchAppAfterInstall">True or false for respectively launching or not launching an application after installation.</param>
-
         public void SetLaunchAppAfterInstall(bool launchAppAfterInstall)
         {
             Microsoft.Phone.Tools.Deploy.GlobalOptions.LaunchAfterInstall = launchAppAfterInstall;
@@ -38,7 +36,6 @@ namespace WPAppInstall.WindowsPhone.Hardware8._1
         /// Scan for connectable devices.
         /// </summary>
         /// <returns>Collection of ConnectableDevice instances.</returns>
-
         public System.Collections.ObjectModel.Collection<ConnectableDevice> ScanDevices()
         {
             MultiTargetingConnectivity multiTargetingConnectivity = new MultiTargetingConnectivity(CultureInfo.CurrentUICulture.LCID);
@@ -51,7 +48,6 @@ namespace WPAppInstall.WindowsPhone.Hardware8._1
         /// </summary>
         /// <param name="connectableDevice">ConnectableDevice instance.</param>
         /// <returns>IDevice handle for device.</returns>
-
         public Microsoft.SmartDevice.Connectivity.Interface.IDevice ConnectToDevice(ConnectableDevice connectableDevice)
         {
             Microsoft.SmartDevice.Connectivity.Interface.IDevice deviceHandle = connectableDevice.Connect(true);
@@ -62,7 +58,6 @@ namespace WPAppInstall.WindowsPhone.Hardware8._1
         /// Disconnect from a device.
         /// </summary>
         /// <param name="deviceHandle">IDevice instance.</param>
-
         public void DisconnectFromDevice(Microsoft.SmartDevice.Connectivity.Interface.IDevice deviceHandle)
         {
             deviceHandle.Disconnect();
@@ -73,7 +68,6 @@ namespace WPAppInstall.WindowsPhone.Hardware8._1
         /// </summary>
         /// <param name="deviceHandle">IDevice instance.</param>
         /// <returns>IFileDeployer handle for device.</returns>
-
         public Microsoft.SmartDevice.Connectivity.Interface.IFileDeployer GetFileDeployer(Microsoft.SmartDevice.Connectivity.Interface.IDevice deviceHandle)
         {
             return deviceHandle.GetFileDeployer();
@@ -84,7 +78,6 @@ namespace WPAppInstall.WindowsPhone.Hardware8._1
         /// </summary>
         /// <param name="deviceHandle">IDevice instance.</param>
         /// <returns>Collection of IRemoteApplication instances.</returns>
-
         public System.Collections.ObjectModel.Collection<Microsoft.SmartDevice.Connectivity.Interface.IRemoteApplication> GetRemoteApplications(Microsoft.SmartDevice.Connectivity.Interface.IDevice deviceHandle)
         {
             return deviceHandle.GetInstalledApplications();
@@ -95,7 +88,6 @@ namespace WPAppInstall.WindowsPhone.Hardware8._1
         /// </summary>
         /// <param name="deviceHandle">IDevice instance.</param>
         /// <returns>ISystemInfo instance.</returns>
-
         public Microsoft.SmartDevice.Connectivity.Interface.ISystemInfo GetSystemInfo(Microsoft.SmartDevice.Connectivity.Interface.IDevice deviceHandle)
         {
             return deviceHandle.GetSystemInfo();
@@ -109,10 +101,9 @@ namespace WPAppInstall.WindowsPhone.Hardware8._1
         /// <param name="info">ManifestInfo from the app that should be installed.</param>
         /// <param name="onComplete">Callback when app is deployed successfully / unsuccessfully.</param>
         /// <param name="deploymentOptions">Different types of deployment can be selected for different internal handling.</param>
-
-        public void DeployApplication(DeviceInfo deviceInfo, string appPath, IAppManifestInfo info, DeploymentOptions deploymentOptions)
+        public void DeployApplication(DeviceInfo deviceInfo, String appPath, IAppManifestInfo info, DeploymentOptions deploymentOptions)
         {
-                Microsoft.Phone.Tools.Deploy.Utils.InstallApplication(deviceInfo, info, deploymentOptions, appPath);
+            Microsoft.Phone.Tools.Deploy.Utils.InstallApplication(deviceInfo, info, deploymentOptions, appPath);
         }
 
     }

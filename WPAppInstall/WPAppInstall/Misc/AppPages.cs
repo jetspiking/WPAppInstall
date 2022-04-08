@@ -9,7 +9,6 @@ namespace WPAppInstall.Misc
     /// <summary>
     /// This enum lists the different pages implemented in the application.
     /// </summary>
-
     public enum AppPages
     {
         Start,

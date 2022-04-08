@@ -10,138 +10,175 @@ namespace WPAppInstall.WindowsPhone.Hardware
     /// <summary>
     /// Handle USB connections.
     /// </summary>
-
     public class USBConnectionHandler
     {
+        /// <summary>
+        /// Devices can be connected or disconnected using USB.
+        /// </summary>
         public enum USBActions
         {
             Connect,
             Disconnect
         }
 
+        /// <summary>
+        /// This class contains actions specific for USB devices.
+        /// </summary>
         public class USBDevice
         {
+            /// <summary>
+            /// Ok or error are possible results for matching the regex.
+            /// </summary>
             public enum RegexResults
             {
                 Ok,
                 Error
             }
 
-            public readonly String vendorId;
-            public readonly String productId;
-            public readonly String guid;
-            public readonly RegexResults result;
+            public readonly String VendorId;
+            public readonly String ProductId;
+            public readonly String Guid;
+            public readonly RegexResults RegexResult;
 
-            private static readonly String REGEX_CHECK = ".*((VID)|(PID))+.*{.*}";
-            private static readonly String REGEX_GUID = "{.+?}";
-            private static readonly String REGEX_VID = "VID_.+?(&|#)";
-            private static readonly String REGEX_PID = "PID_.+?(&|#)";
+            private static readonly String regexCheck = ".*((VID)|(PID))+.*{.*}";
+            private static readonly String regexGuid = "{.+?}";
+            private static readonly String regexVid = "VID_.+?(&|#)";
+            private static readonly String regexPid = "PID_.+?(&|#)";
 
+            /// <summary>
+            /// Create a usb device and it's corresponding properties by attempting to match regex patterns.
+            /// </summary>
+            /// <param name="usbPropertyString">Property string of the usb device.</param>
             public USBDevice(String usbPropertyString)
             {
-                Regex regex = new Regex(REGEX_CHECK);
+                Regex regex = new Regex(regexCheck);
                 Match match = regex.Match(usbPropertyString);
-                result = match.Success ? RegexResults.Ok : RegexResults.Error;
+                RegexResult = match.Success ? RegexResults.Ok : RegexResults.Error;
 
-                Match vendorIdRegex = new Regex(REGEX_VID).Match(usbPropertyString);
+                Match vendorIdRegex = new Regex(regexVid).Match(usbPropertyString);
                 if (vendorIdRegex.Success)
                 {
                     String vendorId = vendorIdRegex.Value;
-                    this.vendorId = vendorId.Substring(4, vendorId.Length - 4 - 1);
+                    this.VendorId = vendorId.Substring(4, vendorId.Length - 4 - 1);
                 }
 
-                Match productIdRegex = new Regex(REGEX_PID).Match(usbPropertyString);
+                Match productIdRegex = new Regex(regexPid).Match(usbPropertyString);
                 if (productIdRegex.Success)
                 {
                     String productId = productIdRegex.Value;
-                    this.productId = productId.Substring(4, productId.Length - 4 - 1);
+                    this.ProductId = productId.Substring(4, productId.Length - 4 - 1);
                 }
 
-                Match guidRegex = new Regex(REGEX_GUID).Match(usbPropertyString);
+                Match guidRegex = new Regex(regexGuid).Match(usbPropertyString);
                 if (guidRegex.Success)
                 {
                     String guid = guidRegex.Value;
-                    this.guid = guid.Substring(1, guid.Length - 1 - 1);
+                    this.Guid = guid.Substring(1, guid.Length - 1 - 1);
                 }
             }
         }
 
-        private IUSBSubsriber _subscriberUSB;
-        private NativeMethods.CallBack _onUSBConnectedCallback;
-        private NativeMethods.CallBack _onUSBDisconnectedCallback;
-        private System.Timers.Timer _timer;
-        private bool _timeoutUSB = false;
-        private USBActions _lastUSBAction = USBActions.Disconnect;
-        private Object _syncLock = new object();
-        private Object _valueLock = new object();
+        private IUSBSubsriber subscriberUSB;
+        private NativeMethods.CallBack onUSBConnectedCallback;
+        private NativeMethods.CallBack onUSBDisconnectedCallback;
+        private System.Timers.Timer timer;
+        private Boolean timeoutUSB = false;
+        private USBActions lastUSBAction = USBActions.Disconnect;
+        private Object syncLock = new Object();
+        private Object valueLock = new Object();
 
+        /// <summary>
+        /// Create a usb connection handler.
+        /// </summary>
+        /// <param name="subscriberUSB">Callback for the usb connect or disconnect action.</param>
         public USBConnectionHandler(IUSBSubsriber subscriberUSB)
         {
-            _subscriberUSB = subscriberUSB;
+            this.subscriberUSB = subscriberUSB;
 
-            _timer = new System.Timers.Timer(Utils.Constants.MIN_USB_TIME_MILLIS);
-            _timer.AutoReset = false;
-            _timer.Elapsed += _timer_Elapsed;
+            timer = new System.Timers.Timer(Utils.Constants.MinUsbTimeMillis);
+            timer.AutoReset = false;
+            timer.Elapsed += _timer_Elapsed;
 
-            _onUSBConnectedCallback = new NativeMethods.CallBack(this.OnUSBConnected);
-            _onUSBDisconnectedCallback = new NativeMethods.CallBack(this.OnUSBDisconnected);
-            NativeMethods.USBMonitorStart(_onUSBConnectedCallback, _onUSBDisconnectedCallback);
+            onUSBConnectedCallback = new NativeMethods.CallBack(this.OnUSBConnected);
+            onUSBDisconnectedCallback = new NativeMethods.CallBack(this.OnUSBDisconnected);
+
+            NativeMethods.USBMonitorStart(onUSBConnectedCallback, onUSBDisconnectedCallback);
         }
 
+        /// <summary>
+        /// If the timer elapsed, stop the timer and disable the usb timeout.
+        /// </summary>
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            lock (_syncLock)
+            lock (syncLock)
             {
-                _timeoutUSB = false;
-                _timer.Stop();
+                timeoutUSB = false;
+                timer.Stop();
             }
         }
 
-        private bool VerifyTimer()
+        /// <summary>
+        /// Enable the usb timeout if previously set to false.
+        /// </summary>
+        /// <returns>Describes whether the usb timeout has been applied.</returns>
+        private Boolean VerifyTimer()
         {
-            lock (_syncLock)
-                if (!_timeoutUSB)
+            lock (syncLock)
+                if (!timeoutUSB)
                 {
-                    _timer.Start();
-                    _timeoutUSB = true;
+                    timer.Start();
+                    timeoutUSB = true;
                     return true;
                 }
             return false;
         }
 
-        private bool VerifyLastAction(USBActions calledFrom)
+        /// <summary>
+        /// Verify the last usb action.
+        /// </summary>
+        /// <param name="calledFrom">USBAction should be swapped.</param>
+        /// <returns>Updates the last action if a lock can be acquired.</returns>
+        private Boolean VerifyLastAction(USBActions calledFrom)
         {
-            lock (_valueLock)
+            lock (valueLock)
             {
-                lock (_syncLock)
+                lock (syncLock)
                 {
-                    _timer.Stop();
-                    _timer.Start();
+                    timer.Stop();
+                    timer.Start();
                 }
 
                 if (calledFrom == USBActions.Connect)
-                    return _lastUSBAction == USBActions.Disconnect;
-                else return _lastUSBAction == USBActions.Connect;
+                    return lastUSBAction == USBActions.Disconnect;
+                else return lastUSBAction == USBActions.Connect;
             }
         }
 
+        /// <summary>
+        /// Notify the usb subscriber on a connect action.
+        /// </summary>
+        /// <param name="name">Name of the usb device connected</param>
         private void OnUSBConnected(String name)
         {
             if (VerifyTimer() || VerifyLastAction(USBActions.Connect))
-                lock (_valueLock)
+                lock (valueLock)
                 {
-                    _subscriberUSB.NotifyConnected(name);
-                    _lastUSBAction = USBActions.Connect;
+                    subscriberUSB.NotifyConnected(name);
+                    lastUSBAction = USBActions.Connect;
                 }
         }
 
+        /// <summary>
+        /// Notify the usb subscriber on a disconnect action.
+        /// </summary>
+        /// <param name="name">Name of the usb device disconnected</param>
         private void OnUSBDisconnected(String name)
         {
             if (VerifyTimer() || VerifyLastAction(USBActions.Disconnect))
-                lock (_valueLock)
+                lock (valueLock)
                 {
-                    _subscriberUSB.NotifyDisconnected(name);
-                    _lastUSBAction = USBActions.Disconnect;
+                    subscriberUSB.NotifyDisconnected(name);
+                    lastUSBAction = USBActions.Disconnect;
                 }
         }
     }

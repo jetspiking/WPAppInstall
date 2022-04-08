@@ -9,7 +9,6 @@ namespace WPAppInstall.Interfaces
     /// <summary>
     /// Interface to resize an application window.
     /// </summary>
-
     public interface IResizable
     {
         void SetResizable(bool enabled);

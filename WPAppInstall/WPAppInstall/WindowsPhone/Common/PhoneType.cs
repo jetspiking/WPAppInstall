@@ -10,9 +10,11 @@ namespace WPAppInstall.WindowsPhone.Common
     /// <summary>
     /// This class contains a few functions to verify what kind of device is connected.
     /// </summary>
-
     public class PhoneType
     {
+        /// <summary>
+        /// The following result codes are possible when connecting a device.
+        /// </summary>
         public enum ErrorResults
         {
             NoError,
@@ -20,24 +22,28 @@ namespace WPAppInstall.WindowsPhone.Common
             ConfigError
         }
 
-        public int _portMapped;
-        public ErrorResults _errorResult;
+        public Int32 portMapped;
+        public ErrorResults errorResult;
 
+        /// <summary>
+        /// Get the type of the phone connected.
+        /// </summary>
+        /// <returns>Type of the phone connected.</returns>
         public PhoneTypes? GetPhoneType()
         {
-            _errorResult = ErrorResults.NoError;
-            uint windowsPhone8Port = NativeMethods.GetWinPhone8Port(Utils.Constants.PHONE_PORT, out _portMapped);
+            errorResult = ErrorResults.NoError;
+            uint windowsPhone8Port = NativeMethods.GetWinPhone8Port(Utils.Constants.WindowsPhonePort, out portMapped);
             if (windowsPhone8Port!=0U)
             {
                 switch(windowsPhone8Port)
                 {
                     case 2306021393U:
                         // Multiple Devices Connected
-                        _errorResult = ErrorResults.MultipleDevices;
+                        errorResult = ErrorResults.MultipleDevices;
                         return null;
                     case 2306021394U:
                         // Windows Phone 8 Config Error
-                        _errorResult = ErrorResults.ConfigError;
+                        errorResult = ErrorResults.ConfigError;
                         return null;
                 }
             }

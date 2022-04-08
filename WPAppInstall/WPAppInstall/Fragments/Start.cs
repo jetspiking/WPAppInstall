@@ -14,21 +14,21 @@ namespace WPAppInstall.Fragments
     /// <summary>
     /// This class builds the view / window to launch apps from the virtual phone selection menu (start app page). 
     /// </summary>
-
     public class Start : IFragment
     {
-        private readonly StackPanel _rootPanel = new StackPanel();
-        private readonly ScrollViewer _phoneScroller = new ScrollViewer();
-        private readonly StackPanel _aboutPanel = new StackPanel();
-        private readonly StackPanel _githubPanel = new StackPanel();
-        private readonly StackPanel _linkedinPanel = new StackPanel();
-        private readonly Grid _appGrid = new Grid();
-        private readonly INavigator _navigator;
+        private readonly StackPanel rootPanel = new StackPanel();
+        private readonly ScrollViewer phoneScroller = new ScrollViewer();
+        private readonly StackPanel aboutPanel = new StackPanel();
+        private readonly Grid appGrid = new Grid();
+        private readonly INavigator navigator;
 
         private readonly ButtonBoundary _buttonBackBoundary = new ButtonBoundary(new Point(41, 505), new Point(79, 541));
         private readonly ButtonBoundary _buttonStartBoundary = new ButtonBoundary(new Point(155, 505), new Point(193, 541));
         private readonly ButtonBoundary _buttonSearchBoundary = new ButtonBoundary(new Point(282, 505), new Point(312, 541));
 
+        /// <summary>
+        /// A button can have an x and y position in which an action is captured.
+        /// </summary>
         internal class ButtonBoundary
         {
             public Point _x;
@@ -41,6 +41,9 @@ namespace WPAppInstall.Fragments
             }
         }
 
+        /// <summary>
+        /// 'Applications' (or shortcuts) that are present by default in the app view.
+        /// </summary>
         public enum Apps
         {
             About,
@@ -53,19 +56,23 @@ namespace WPAppInstall.Fragments
             Github
         }
 
+        /// <summary>
+        /// Build the view or page that is used as a starting page.
+        /// </summary>
+        /// <param name="navigator"></param>
         public Start(INavigator navigator)
         {
-            _navigator = navigator;
+            this.navigator = navigator;
 
             // Init Scroll panel
-            _rootPanel.Orientation = Orientation.Vertical;
-            _rootPanel.Width = 350;
-            _rootPanel.Background = new ImageBrush(Misc.Image.GetPhoneImage(Misc.Application.Lifecycle.ApplicationTheme));
-            _rootPanel.MouseLeftButtonDown += _rootPanel_MouseLeftButtonDown;
-            _phoneScroller.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
-            _phoneScroller.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            _phoneScroller.Margin = new System.Windows.Thickness(20, 20, 20, 80);
-            _rootPanel.Children.Add(_phoneScroller);
+            rootPanel.Orientation = Orientation.Vertical;
+            rootPanel.Width = 350;
+            rootPanel.Background = new ImageBrush(Misc.Image.GetPhoneImage(Misc.Application.Lifecycle.ApplicationTheme));
+            rootPanel.MouseLeftButtonDown += RootPanel_MouseLeftButtonDown;
+            phoneScroller.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
+            phoneScroller.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            phoneScroller.Margin = new System.Windows.Thickness(20, 20, 20, 80);
+            rootPanel.Children.Add(phoneScroller);
 
             // Init About panel
             Label aboutLabel = new Label
@@ -76,7 +83,7 @@ namespace WPAppInstall.Fragments
                 Foreground = new SolidColorBrush(Misc.Application.Lifecycle.ApplicationColor)
             };
 
-            _aboutPanel.Children.Add(aboutLabel);
+            aboutPanel.Children.Add(aboutLabel);
 
             TextBlock aboutHint = new TextBlock
             {
@@ -86,7 +93,7 @@ namespace WPAppInstall.Fragments
                 Margin = new System.Windows.Thickness(5, 0, 5, 0)
             };
 
-            _aboutPanel.Children.Add(aboutHint);
+            aboutPanel.Children.Add(aboutHint);
 
             TextBlock githubHint = new TextBlock
             {
@@ -96,7 +103,7 @@ namespace WPAppInstall.Fragments
                 TextWrapping = System.Windows.TextWrapping.Wrap
             };
 
-            _aboutPanel.Children.Add(githubHint);
+            aboutPanel.Children.Add(githubHint);
 
             Button githubButton = new Button
             {
@@ -110,47 +117,57 @@ namespace WPAppInstall.Fragments
             };
             githubButton.Click += GithubButton_Click;
 
-            _aboutPanel.Children.Add(githubButton);
+            aboutPanel.Children.Add(githubButton);
 
 
             // Start panel
-            _appGrid = new Grid();
-            _appGrid.RowDefinitions.Add(new RowDefinition());
-            _appGrid.RowDefinitions.Add(new RowDefinition());
-            _appGrid.RowDefinitions.Add(new RowDefinition());
-            _appGrid.RowDefinitions.Add(new RowDefinition());
-            _appGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            _appGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            appGrid = new Grid();
+            appGrid.RowDefinitions.Add(new RowDefinition());
+            appGrid.RowDefinitions.Add(new RowDefinition());
+            appGrid.RowDefinitions.Add(new RowDefinition());
+            appGrid.RowDefinitions.Add(new RowDefinition());
+            appGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            appGrid.ColumnDefinitions.Add(new ColumnDefinition());
 
-            _phoneScroller.Content = _appGrid;
+            phoneScroller.Content = appGrid;
 
-            _appGrid.Margin = new System.Windows.Thickness(20, 20, 20, 0);
-            AddApp(_appGrid, Apps.About, 0, 0);
-            AddApp(_appGrid, Apps.Devices, 1, 0);
-            AddApp(_appGrid, Apps.Apps, 0, 1);
-            AddApp(_appGrid, Apps.Deploy, 1, 1);
-            AddApp(_appGrid, Apps.Manager, 0, 2);
-            AddApp(_appGrid, Apps.Settings, 1, 2);
-            AddApp(_appGrid, Apps.Github, 0, 3);
-            AddApp(_appGrid, Apps.LinkedIn, 1, 3);
+            appGrid.Margin = new System.Windows.Thickness(20, 20, 20, 0);
+            AddApp(appGrid, Apps.About, 0, 0);
+            AddApp(appGrid, Apps.Devices, 1, 0);
+            AddApp(appGrid, Apps.Apps, 0, 1);
+            AddApp(appGrid, Apps.Deploy, 1, 1);
+            AddApp(appGrid, Apps.Manager, 0, 2);
+            AddApp(appGrid, Apps.Settings, 1, 2);
+            AddApp(appGrid, Apps.Github, 0, 3);
+            AddApp(appGrid, Apps.LinkedIn, 1, 3);
 
-            _phoneScroller.Content = _appGrid;
+            phoneScroller.Content = appGrid;
         }
 
-        private void _rootPanel_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        /// <summary>
+        /// Check whether a device button was clicked by verifying the known boundaries.
+        /// </summary>
+        private void RootPanel_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Point mousePosition = e.GetPosition((StackPanel)sender);
             double x = mousePosition.X;
             double y = mousePosition.Y;
 
             if (x > _buttonBackBoundary._x.X && x < _buttonBackBoundary._y.X && y > _buttonBackBoundary._x.Y && y < _buttonBackBoundary._y.Y)
-                _phoneScroller.Content = _appGrid;
+                phoneScroller.Content = appGrid;
             if (x > _buttonStartBoundary._x.X && x < _buttonStartBoundary._y.X && y > _buttonStartBoundary._x.Y && y < _buttonStartBoundary._y.Y)
-                _phoneScroller.Content = _appGrid;
+                phoneScroller.Content = appGrid;
             if (x > _buttonSearchBoundary._x.X && x < _buttonSearchBoundary._y.X && y > _buttonSearchBoundary._x.Y && y < _buttonSearchBoundary._y.Y)
-                _phoneScroller.Content = _appGrid;
+                phoneScroller.Content = appGrid;
         }
 
+        /// <summary>
+        /// Add an application to the grid.
+        /// </summary>
+        /// <param name="appGrid">Grid to add app to.</param>
+        /// <param name="app">App to add to grid.</param>
+        /// <param name="column">App column.</param>
+        /// <param name="row">App row.</param>
         private void AddApp(Grid appGrid, Apps app, int column, int row)
         {
             StackPanel buttonStack = new StackPanel
@@ -188,28 +205,31 @@ namespace WPAppInstall.Fragments
             appGrid.Children.Add(buttonStack);
         }
 
+        /// <summary>
+        /// Verify which app was pressed and perform an action.
+        /// </summary>
         private void ButtonStack_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             StackPanel stackPanel = (StackPanel)sender;
             switch (stackPanel.Name)
             {
                 case nameof(Apps.About):
-                    _phoneScroller.Content = _aboutPanel;
+                    phoneScroller.Content = aboutPanel;
                     break;
                 case nameof(Apps.Devices):
-                    _navigator.Navigate(Misc.AppPages.Devices);
+                    navigator.Navigate(Misc.AppPages.Devices);
                     break;
                 case nameof(Apps.Apps):
-                    _navigator.Navigate(Misc.AppPages.Apps);
+                    navigator.Navigate(Misc.AppPages.Apps);
                     break;
                 case nameof(Apps.Deploy):
-                    _navigator.Navigate(Misc.AppPages.Deploy);
+                    navigator.Navigate(Misc.AppPages.Deploy);
                     break;
                 case nameof(Apps.Manager):
-                    _navigator.Navigate(Misc.AppPages.Manager);
+                    navigator.Navigate(Misc.AppPages.Manager);
                     break;
                 case nameof(Apps.Settings):
-                    _navigator.Navigate(Misc.AppPages.Settings);
+                    navigator.Navigate(Misc.AppPages.Settings);
                     break;
                 case nameof(Apps.LinkedIn):
                     System.Diagnostics.Process.Start(Resources.Strings.AppStrings.APP_URL_LINKEDIN);
@@ -220,14 +240,21 @@ namespace WPAppInstall.Fragments
             }
         }
 
+        /// <summary>
+        /// This action is used for the separate link as displayed under the dedicated about section.
+        /// </summary>
         private void GithubButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start(Resources.Strings.AppStrings.APP_URL_GITHUB);
         }
 
+        /// <summary>
+        /// Get the root of this view for displaying purposes.
+        /// </summary>
+        /// <returns>Root of this view.</returns>
         public StackPanel GetRoot()
         {
-            return _rootPanel;
+            return rootPanel;
         }
 
     }

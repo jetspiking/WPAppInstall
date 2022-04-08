@@ -16,40 +16,54 @@ namespace WPAppInstall.WindowsPhone.Hardware
     /// <summary>
     /// This class allows to perform actions on Win32 devices.
     /// </summary>
-
     public class DeviceController
     {
-        private const String CMD = "cmd.exe";
-        private const String ENABLE_DEVICE_COMMAND = "enable-device";
-        private const String DISABLE_DEVICE_COMMAND = "disable-device";
+        private const String cmdProcess = "cmd.exe";
+        private const String enableDeviceCommand = "enable-device";
+        private const String disableDeviceCommand = "disable-device";
 
+        /// <summary>
+        /// Function to disable file system redirection.
+        /// </summary>
         [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern int Wow64DisableWow64FsRedirection(ref IntPtr ptr);
+        public static extern Int32 Wow64DisableWow64FsRedirection(ref IntPtr ptr);
         
+        /// <summary>
+        /// Initialize and disable file system redirection.
+        /// </summary>
         private DeviceController()
         {
             IntPtr val = IntPtr.Zero;
             Wow64DisableWow64FsRedirection(ref val);
         }
 
+        /// <summary>
+        /// Get the DeviceController object singleton.
+        /// </summary>
+        /// <returns>DeviceController object singleton.</returns>
         public static DeviceController GetInstance()
         {
             return new DeviceController();
         }
 
-        public void EnableDevice(String pnpDeviceId, bool enable)
+        /// <summary>
+        /// Enable or disable a device by the pnp device id.
+        /// </summary>
+        /// <param name="pnpDeviceId">Identifier for the device.</param>
+        /// <param name="enable">Whether the device should be enabled or disabled.</param>
+        public void EnableDevice(String pnpDeviceId, Boolean enable)
         {
             System.Diagnostics.Process process = new System.Diagnostics.Process();
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo
             {
                 WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal,
-                FileName = CMD,
+                FileName = cmdProcess,
                 UseShellExecute = true,
                 RedirectStandardOutput = false,
                 Verb = "runas"
             };
 
-            String command = enable ? ENABLE_DEVICE_COMMAND : DISABLE_DEVICE_COMMAND;
+            String command = enable ? enableDeviceCommand : disableDeviceCommand;
             startInfo.Arguments = $"/C \"pnputil /{command} \"{pnpDeviceId}\"\"";
 
             process.StartInfo = startInfo;
@@ -57,6 +71,3 @@ namespace WPAppInstall.WindowsPhone.Hardware
         }
     }
 }
-
-// pnputil is a tool default installed on computers with Windows Vista and up, which allows for easy modification of USB-devices.
-// Not working, attempt DevCon instead for removing a device, this isn't supported by pnputil. 

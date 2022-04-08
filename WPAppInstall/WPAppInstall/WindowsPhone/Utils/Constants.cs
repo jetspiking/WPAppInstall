@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 namespace WPAppInstall.WindowsPhone.Utils
 {
     /// <summary>
-    /// Class for keeping some constants.
+    /// Class for storing constants related to Windows Phone.
     /// </summary>
-
     public static class Constants
     {
-        public static readonly int PHONE_PORT = 27077;
-        public static readonly String ZUNE_PROCESS_NAME = "Zune";
-        public static readonly String PHONE_IP_ADDRESS = "127.0.0.1";
-        public static readonly int MIN_USB_TIME_MILLIS = 10000; 
+        public static readonly Int32 WindowsPhonePort = 27077;
+        public static readonly String ZuneProcessName = "Zune";
+        public static readonly String PhoneIpAddress = "127.0.0.1";
+        public static readonly Int32 MinUsbTimeMillis = 10000; 
     }
 }

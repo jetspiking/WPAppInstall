@@ -11,10 +11,14 @@ namespace WPAppInstall.WindowsPhone.Hardware
     /// <summary>
     /// Allows checking for existing Windows Phone devices.
     /// </summary>
-
     public static class ProductIds
     {
-        public static bool Contains(String name)
+        /// <summary>
+        /// Check if the product name is known.
+        /// </summary>
+        /// <param name="name">Name of the device.</param>
+        /// <returns>True or false for knowing or not known the product.</returns>
+        public static Boolean Contains(String name)
         {
             foreach (Devices device in Enum.GetValues(typeof(Devices)))
                 if (name.ToLower().Contains(device.ToString().ToLower()))
@@ -27,11 +31,17 @@ namespace WPAppInstall.WindowsPhone.Hardware
             return false;
         }
 
+        /// <summary>
+        /// Verify if the device series is known.
+        /// </summary>
         public enum DeviceSeries
         {
             LUMIA
         }
 
+        /// <summary>
+        /// Known Windows Phone devices.
+        /// </summary>
         public enum Devices
         {
             // Windows Phone 7 Devices
@@ -153,11 +163,19 @@ namespace WPAppInstall.WindowsPhone.Hardware
             WIN_PHONE_50        // TREKSTOR
         }
 
+        /// <summary>
+        /// Identifier to recognize Windows Phone 7 devices.
+        /// </summary>
         private static readonly Dictionary<String, String> productIds = new Dictionary<String, String>()
         {
             { "04EC", AppStrings.APP_WINDOWS_PHONE_7_DEVICE },
         };
 
+        /// <summary>
+        /// Try to read more information with the product id.
+        /// </summary>
+        /// <param name="pid">Identifier for the product.</param>
+        /// <returns>String that contains more information about the product.</returns>
         public static String GetPIDAddition(String pid)
         {
             String value;

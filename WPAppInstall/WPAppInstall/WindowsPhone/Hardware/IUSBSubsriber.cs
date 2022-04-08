@@ -9,7 +9,6 @@ namespace WPAppInstall.WindowsPhone.Hardware
     /// <summary>
     /// Subscribe to USB-connected / USB-disconnected action.
     /// </summary>
-
     public interface IUSBSubsriber
     {
         void NotifyConnected(String name);

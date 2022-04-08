@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 namespace WPAppInstall.WindowsPhone.Common
 {
     /// <summary>
-    /// This class lists the state of the phone.
+    /// This class lists the possible states of the phone.
     /// </summary>
-
     public enum PhoneStates
     {
         Registered,

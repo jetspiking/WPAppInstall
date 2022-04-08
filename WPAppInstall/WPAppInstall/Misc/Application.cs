@@ -13,7 +13,6 @@ namespace WPAppInstall.Misc
     /// <summary>
     /// This class provides a few default settings and a Lifecycle class which contains instances of objects for easy access. 
     /// </summary>
-
     public static class Application
     {
         public static class Margin
@@ -32,38 +31,53 @@ namespace WPAppInstall.Misc
             public static readonly int MAX_PAGE_HISTORY = 9;
         }
 
+        /// <summary>
+        /// Class that stores data relevant to the application in a lifecycle object.
+        /// </summary>
         public static class Lifecycle
         {
             public static Themes ApplicationTheme = Themes.Blackberry;
             public static Color ApplicationColor = ColorTheme.GetThemeColor(ApplicationTheme);
             public static AppPages ApplicationPage = AppPages.Start;
-            private static List<AppPages> _applicationPageHistory = new List<AppPages>();
+            private static List<AppPages> applicationPageHistory = new List<AppPages>();
             public static Hardware81 Hardware81 = new Hardware81();
-            public static List<USBScanner.USBDevice> DevicesUSB = USBScanner.GetUSBDevices(USBScanner.FILTER_PROPERTIES_WINDOWS_PHONE);
-            public static String[] paths = new String[0];
-            public static Microsoft.Phone.Tools.Deploy.IAppManifestInfo[] manifestInfoList = new Microsoft.Phone.Tools.Deploy.IAppManifestInfo[0];
+            public static List<USBScanner.USBDevice> DevicesUSB = USBScanner.GetUSBDevices(USBScanner.FilterPropertiesWindowsPhone);
+            public static String[] Paths = new String[0];
+            public static Microsoft.Phone.Tools.Deploy.IAppManifestInfo[] ManifestInfoList = new Microsoft.Phone.Tools.Deploy.IAppManifestInfo[0];
 
-            public static bool HistoryContainsMorePages()
+            /// <summary>
+            /// Check whether the page history is empty or not.
+            /// </summary>
+            /// <returns></returns>
+            public static Boolean HistoryContainsMorePages()
             {
-                return _applicationPageHistory.Count > 0;
+                return applicationPageHistory.Count > 0;
             }
 
+            /// <summary>
+            /// Navigate to the previously visited page.
+            /// </summary>
+            /// <returns>Previously visited page.</returns>
             public static AppPages? PopPage()
             {
-                if (_applicationPageHistory.Count>0)
+                if (applicationPageHistory.Count>0)
                 {
-                    AppPages appPage = _applicationPageHistory[_applicationPageHistory.Count - 1];
-                    _applicationPageHistory.Remove(appPage);
+                    AppPages appPage = applicationPageHistory[applicationPageHistory.Count - 1];
+                    applicationPageHistory.Remove(appPage);
                     return appPage;
                 }
                 return null;
             }
 
+            /// <summary>
+            /// Add a page to the navigation history.
+            /// </summary>
+            /// <param name="page">Last visited page.</param>
             public static void AddPage(AppPages page)
             {
-                _applicationPageHistory.Add(page);
-                if (_applicationPageHistory.Count >= Generic.MAX_PAGE_HISTORY)
-                    _applicationPageHistory.RemoveAt(0);
+                applicationPageHistory.Add(page);
+                if (applicationPageHistory.Count >= Generic.MAX_PAGE_HISTORY)
+                    applicationPageHistory.RemoveAt(0);
             }
         }
     }

@@ -10,7 +10,6 @@ namespace WPAppInstall.Interfaces
     /// <summary>
     /// Interface for fragments.
     /// </summary>
-
     interface IFragment
     {
         StackPanel GetRoot();

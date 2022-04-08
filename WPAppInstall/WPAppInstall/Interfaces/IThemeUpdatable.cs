@@ -9,7 +9,6 @@ namespace WPAppInstall.Interfaces
     /// <summary>
     /// Interface to update the application theme.
     /// </summary>
-
     public interface IThemeUpdatable
     {
         void UpdateAppTheme();
