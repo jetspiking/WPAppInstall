@@ -22,7 +22,8 @@ Download and unarchive the .zip under releases and launch the executable "WPAppI
 - Windows Phone 8.0 SKD
 - Windows Phone 8.1 SDK
 - Windows 8(.1), Windows 10 or Windows 11 
-- Tested working on Mac Mini with Apple Silicon M1 CPU
+
+Tested working on Mac Mini with Apple Silicon M1 CPU
 
 # Overview
 Download the demo video [here](https://github.com/jetspiking/WPAppInstall/blob/main/Video/WPAppInstall.mp4).
