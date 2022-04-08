@@ -26,7 +26,9 @@ The following SDK's must be installed.
 The following operating systems have been tested working.
 - Windows 8(.1), Windows 10 and Windows 11.
 
-The application was tested working on a Mac Mini with Apple Silicon M1 CPU (Windows 11 ARM --> x86 / x64 emulation using Parallels).
+The application was tested working on a Mac Mini with Apple Silicon M1 CPU.
+- Windows 11 ARM
+- x86 / x64 emulation using Parallels
 
 # Overview
 Download the demo video [here](https://github.com/jetspiking/WPAppInstall/blob/main/Video/WPAppInstall.mp4).
