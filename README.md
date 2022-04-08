@@ -19,11 +19,14 @@ Download and unarchive the .zip under releases and launch the executable "WPAppI
 [Releases](https://github.com/jetspiking/WPAppInstall/releases)
 
 # Requirements
+The following SDK's must be installed.
 - Windows Phone 8.0 SKD
 - Windows Phone 8.1 SDK
-- Windows 8(.1), Windows 10 or Windows 11 
 
-Tested working on Mac Mini with Apple Silicon M1 CPU
+The following operating systems have been tested working.
+- Windows 8(.1), Windows 10 and Windows 11.
+
+The application was tested working on a Mac Mini with Apple Silicon M1 CPU (Windows 11 ARM --> x86 / x64 emulation using Parallels).
 
 # Overview
 Download the demo video [here](https://github.com/jetspiking/WPAppInstall/blob/main/Video/WPAppInstall.mp4).
