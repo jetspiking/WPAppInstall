@@ -99,35 +99,36 @@
   <ItemGroup>
     <Reference Include="Microsoft.Phone.Tools.Common, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Microsoft.Phone.Tools.Common.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>.\Microsoft.Phone.Tools.Common.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.Phone.Tools.Deploy, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=x86">
+    <Reference Include="Microsoft.Phone.Tools.Deploy">
+      <HintPath>.\Microsoft.Phone.Tools.Deploy.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.SmartDevice.Connectivity, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Microsoft.Phone.Tools.Deploy.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Microsoft.SmartDevice.Connectivity">
-      <HintPath>..\Dependencies\Microsoft.SmartDevice.Connectivity.dll</HintPath>
+      <HintPath>.\Microsoft.SmartDevice.Connectivity.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Smartdevice.Connectivity.Interface, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Microsoft.Smartdevice.Connectivity.Interface.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>.\Microsoft.Smartdevice.Connectivity.Interface.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Smartdevice.ConnectivityWrapper.12, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Microsoft.Smartdevice.ConnectivityWrapper.12.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>.\Microsoft.Smartdevice.ConnectivityWrapper.12.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Smartdevice.MultiTargeting.Connectivity, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Microsoft.Smartdevice.MultiTargeting.Connectivity.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>.\Microsoft.Smartdevice.MultiTargeting.Connectivity.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=17.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Microsoft.VisualStudio.OLE.Interop.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
